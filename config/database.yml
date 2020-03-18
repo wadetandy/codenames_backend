@@ -1,0 +1,16 @@
+default: &default
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+development:
+  <<: *default
+  database: partygames_development
+
+test:
+  <<: *default
+  database: partygames_test
+
+production:
+  <<: *default
+  database: partygames_production
