@@ -1,4 +1,6 @@
 require 'graphql'
+require 'app/models/user'
+require 'app/models/team'
 require 'app/models/codenames_game'
 require 'lib/codenames/word_list_factory'
 require_relative 'base_mutation'
@@ -16,23 +18,19 @@ module Mutations
 
       word_list = Codenames::WordListFactory.new.build_word_list(first_move: first_move)
 
-      settings = CodenamesSettings.create(
+      red_team = Team.create!(name: 'Red', users: [current_user])
+      blue_team = Team.create!(name: 'Blue')
+
+      game = CodenamesGame.create(
         board_height: 5,
         board_width: 5,
         first_move: first_move,
         next_move: first_move,
         word_list: word_list,
-        revealed: []
+        admin: current_user,
+        red_team: red_team,
+        blue_team: blue_team
       )
-
-      if settings.invalid?
-        return {
-          success: false,
-          errors: settings.errors.full_messages
-        }
-      end
-
-      game = CodenamesGame.create(settings: settings)
 
       if game.invalid?
         return {
@@ -44,7 +42,7 @@ module Mutations
       {
         success: true,
         errors: [],
-        game: game.to_graphql
+        game: game
       }
     end
   end

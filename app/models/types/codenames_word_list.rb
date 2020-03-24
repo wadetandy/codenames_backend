@@ -10,7 +10,8 @@ module Types
           else
             Codenames::Word.new(
               word: v['word'],
-              owner: Codenames::WordOwner.deserialize(v['owner'])
+              owner: Codenames::WordOwner.deserialize(v['owner']),
+              revealed: v['revealed']
             )
           end
         end
@@ -22,7 +23,8 @@ module Types
         value.map {|v|
           {
             word: v.word,
-            owner: v.owner.serialize
+            owner: v.owner.serialize,
+            revealed: v.revealed
           }
         }
       )

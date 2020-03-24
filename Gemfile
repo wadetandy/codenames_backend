@@ -10,10 +10,11 @@ gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'puma'
 gem 'rack-contrib'
+gem 'rack-cors'
 
 gem 'activerecord'
 gem 'sinatra-activerecord'
-gem 'sqlite3'
+gem 'pg'
 gem 'strong_migrations'
 
 gem 'sorbet'

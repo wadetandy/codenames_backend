@@ -12,8 +12,12 @@ class PartyGamesApp < Sinatra::Base
   configure :development do
     register Sinatra::Reloader
   end
+
+  enable :sessions
+
   set :database_file, 'config/database.yml'
   use Rack::PostBodyContentTypeParser
+  set :protection, :except => :json_csrf
 
   get '/' do
     erb :graphiql, locals: {
@@ -23,11 +27,24 @@ class PartyGamesApp < Sinatra::Base
   end
 
   post '/graphql' do
+    context = {
+      # we need to provide session and current user
+      session: session,
+      current_user: current_user
+    }
     result = PartyGamesAppSchema.execute(
       params[:query],
       variables: params[:variables],
-      context: { current_user: nil },
+      context: context,
     )
     json result
+  end
+
+  private
+
+  def current_user
+    if (id = session[:user_id])
+      User.find(id)
+    end
   end
 end

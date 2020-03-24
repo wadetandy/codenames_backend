@@ -15,6 +15,12 @@ class PartyGamesAppSchema < GraphQL::Schema
   end
 
   rescue_from(StandardError) do |err, obj, args, ctx, field|
+    puts err.inspect
     raise GraphQL::ExecutionError, "#{err.message}\n#{err.backtrace.join("\n")}"
+  end
+
+  def self.unauthorized_object(error)
+    # Add a top-level error to the response instead of returning nil:
+    raise GraphQL::ExecutionError, "You must be authenticated to access #{error.field.name}"
   end
 end

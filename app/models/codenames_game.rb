@@ -1,20 +1,17 @@
-require_relative 'game'
+require_relative 'application_record'
+require_relative 'types/codenames_word_list'
+require_relative 'types/sorbet_enum'
 
-class CodenamesGame < Game
-  belongs_to :settings, class_name: 'CodenamesSettings'
+class CodenamesGame < ApplicationRecord
+  attribute :word_list, Types::CodenamesWordList.new, array: true
+  attribute :first_move, Types::SorbetEnum.new(Codenames::WordOwner)
+  attribute :next_move, Types::SorbetEnum.new(Codenames::WordOwner)
 
-  def to_graphql
-    {
-      id: id,
-      word_list: settings.word_list.each_with_index.map do|w, idx|
-        revealed = (settings.revealed || []).include?(idx)
-        {
-          word: w.word,
-          owner: revealed ? w.owner.serialize : 'unknown'
-        }
-      end,
-      first_move: settings.first_move,
-      next_move: settings.next_move,
-    }
-  end
+  belongs_to :red_team, class_name: 'Team'
+  belongs_to :blue_team, class_name: 'Team'
+  belongs_to :admin, class_name: 'User'
+
+  validates :board_height, presence: true
+  validates :board_width, presence: true
+  validates :first_move, presence: true
 end
