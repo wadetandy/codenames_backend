@@ -8,10 +8,10 @@ class GraphqlTypes::CodenamesWord < GraphqlTypes::BaseObject
   field :owner, GraphqlTypes::CodenamesWordOwner, null: false
 
   def owner
-    if object.revealed
+    # if object.revealed
       object.owner.serialize
-    else
-      'unknown'
-    end
+    # else
+    #   'unknown'
+    # end
   end
 end

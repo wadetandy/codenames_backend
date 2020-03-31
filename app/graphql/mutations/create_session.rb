@@ -1,5 +1,6 @@
 require 'graphql'
 require 'app/models/user'
+require_relative '../types/user'
 
 module Mutations
   class CreateSession < GraphQL::Schema::Mutation
@@ -7,7 +8,7 @@ module Mutations
 
     argument :nickname, String, required: true
 
-    field :user_id, ID, null: false
+    field :user, GraphqlTypes::User, null: false
 
     def resolve(nickname:)
       user = User.create!(name: nickname)
@@ -15,14 +16,14 @@ module Mutations
       session[:user_id] = user.id
 
       {
-        user_id: user.id
+        user: user
       }
     end
 
     private
 
     def session
-      context[:session]
+      context.session
     end
   end
 end

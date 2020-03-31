@@ -29,7 +29,8 @@ module Mutations
         word_list: word_list,
         admin: current_user,
         red_team: red_team,
-        blue_team: blue_team
+        blue_team: blue_team,
+        users: [current_user]
       )
 
       if game.invalid?

@@ -1,8 +1,10 @@
 require 'graphql'
 require_relative 'query'
 require_relative 'mutation'
+require_relative 'app_context'
 
 class PartyGamesAppSchema < GraphQL::Schema
+  context_class AppContext
   query QueryType
   mutation MutationType
 

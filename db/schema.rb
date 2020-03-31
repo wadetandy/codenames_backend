@@ -29,13 +29,19 @@ ActiveRecord::Schema.define(version: 2020_03_18_003723) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "teams", force: :cascade do |t|
-    t.string "name", null: false
+  create_table "codenames_games_users", id: false, force: :cascade do |t|
+    t.uuid "codenames_game_id", null: false
+    t.uuid "user_id", null: false
   end
 
-  create_table "teams_users", id: false, force: :cascade do |t|
-    t.bigint "user_id", null: false
+  create_table "team_memberships", id: false, force: :cascade do |t|
+    t.uuid "user_id", null: false
     t.bigint "team_id", null: false
+  end
+
+  create_table "teams", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "users_count"
   end
 
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|

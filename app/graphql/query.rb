@@ -1,5 +1,6 @@
 require 'graphql'
 require_relative 'types/codenames_game'
+require_relative 'types/user'
 
 require 'app/models/codenames_game'
 
@@ -12,7 +13,11 @@ class QueryType < GraphQL::Schema::Object
   end
 
   field :codenames_games, [GraphqlTypes::CodenamesGame], null: false do
-    description 'list games'
+    description 'List all games involving the current user'
+  end
+
+  field :viewer, GraphqlTypes::User, null: true do
+    description 'Show the currently authenticated user'
   end
 
   def codenames_game(id:)
@@ -21,5 +26,9 @@ class QueryType < GraphQL::Schema::Object
 
   def codenames_games
     CodenamesGame.all
+  end
+
+  def viewer
+    context.current_user
   end
 end

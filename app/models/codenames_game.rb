@@ -9,6 +9,8 @@ class CodenamesGame < ApplicationRecord
 
   belongs_to :red_team, class_name: 'Team'
   belongs_to :blue_team, class_name: 'Team'
+  has_and_belongs_to_many :users, class_name: 'User'
+
   belongs_to :admin, class_name: 'User'
 
   validates :board_height, presence: true
